@@ -93,66 +93,68 @@ export default function NewCampaignPage() {
   }
 
   return (
-    <div className="p-8 max-w-2xl">
+    <div className="p-8 max-w-2xl mx-auto">
       <div className="mb-6">
-        <Link href="/campaigns" className="text-sm text-gray-500 hover:text-gray-700">
+        <Link href="/campaigns" className="text-sm text-white/50 hover:text-white transition-colors">
           ← Back to campaigns
         </Link>
-        <h1 className="text-2xl font-semibold text-gray-900 mt-3">Launch a campaign</h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <h1 className="text-3xl font-serif font-medium text-white mt-4">Launch a campaign</h1>
+        <p className="text-sm text-white/70 mt-2">
           Your campaign will be reviewed before going live. Once approved, investors can pitch and fund it.
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-8 bg-white/5 p-8 rounded-3xl border border-white/10 shadow-xl">
 
         {/* Business type */}
-        <fieldset className="space-y-2">
-          <legend className="text-sm font-medium text-gray-700">Business type</legend>
-          <div className="grid grid-cols-2 gap-3">
-            <label className="flex items-start gap-3 p-4 border rounded-xl cursor-pointer has-checked:border-emerald-500 has-checked:bg-emerald-50">
+        <fieldset className="space-y-4">
+          <legend className="text-sm font-medium text-white/90">Business type</legend>
+          <div className="grid grid-cols-2 gap-4">
+            <label className="flex items-start gap-3 p-4 border border-white/10 rounded-xl cursor-pointer has-checked:border-accent has-checked:bg-accent/10 hover:border-white/20 transition-colors">
               <input
                 type="radio"
                 name="business_type"
                 value="startup"
                 checked={form.business_type === 'startup'}
                 onChange={() => set('business_type', 'startup')}
-                className="mt-0.5"
+                className="mt-1 opacity-70 accent-accent"
               />
               <div>
-                <p className="text-sm font-medium text-gray-900">Startup / Corporate</p>
-                <p className="text-xs text-gray-500 mt-0.5">Scalable venture seeking growth capital</p>
+                <p className="text-sm font-medium text-white">Startup / Corporate</p>
+                <p className="text-xs text-white/50 mt-1 leading-relaxed">Scalable venture seeking growth capital</p>
               </div>
             </label>
-            <label className="flex items-start gap-3 p-4 border rounded-xl cursor-pointer has-checked:border-emerald-500 has-checked:bg-emerald-50">
+            <label className="flex items-start gap-3 p-4 border border-white/10 rounded-xl cursor-pointer has-checked:border-accent has-checked:bg-accent/10 hover:border-white/20 transition-colors">
               <input
                 type="radio"
                 name="business_type"
                 value="local"
                 checked={form.business_type === 'local'}
                 onChange={() => set('business_type', 'local')}
-                className="mt-0.5"
+                className="mt-1 opacity-70 accent-accent"
               />
               <div>
-                <p className="text-sm font-medium text-gray-900">Local Business</p>
-                <p className="text-xs text-gray-500 mt-0.5">Community-rooted, geographically specific</p>
+                <p className="text-sm font-medium text-white">Local Business</p>
+                <p className="text-xs text-white/50 mt-1 leading-relaxed">Community-rooted, geographically specific</p>
               </div>
             </label>
           </div>
         </fieldset>
 
         {/* Title */}
-        <Field label="Campaign title" required>
-          <input
-            type="text"
-            required
-            maxLength={120}
-            value={form.title}
-            onChange={(e) => set('title', e.target.value)}
-            placeholder="e.g. Halal Grocery Store Expansion"
-            className={inputCls}
-          />
-        </Field>
+        <div className="pt-4 border-t border-white/10">
+          <Field label="Campaign title" required>
+            <input
+              type="text"
+              required
+              maxLength={120}
+              value={form.title}
+              onChange={(e) => set('title', e.target.value)}
+              placeholder="e.g. Halal Grocery Store Expansion"
+              className={inputCls}
+            />
+          </Field>
+        </div>
 
         {/* Description */}
         <Field label="Description" required>
@@ -173,18 +175,18 @@ export default function NewCampaignPage() {
             required
             value={form.sector}
             onChange={(e) => set('sector', e.target.value)}
-            className={inputCls}
+            className={`${inputCls} [&>option]:text-black`}
           >
-            <option value="">Select a sector…</option>
+            <option value="" disabled>Select a sector…</option>
             {SECTORS.map((s) => <option key={s} value={s}>{s}</option>)}
           </select>
         </Field>
 
         {/* Financials */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-6 pt-4 border-t border-white/10">
           <Field label="Fundraising target (USD)" required>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">$</span>
               <input
                 type="number"
                 required
@@ -196,12 +198,12 @@ export default function NewCampaignPage() {
                 className={`${inputCls} pl-7`}
               />
             </div>
-            <p className="text-xs text-gray-400 mt-1">Minimum $10,000</p>
+            <p className="text-xs text-white/40 mt-1.5">Minimum $10,000</p>
           </Field>
 
           <Field label="Minimum investment (USD)" required>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">$</span>
               <input
                 type="number"
                 required
@@ -212,11 +214,11 @@ export default function NewCampaignPage() {
                 className={`${inputCls} pl-7`}
               />
             </div>
-            <p className="text-xs text-gray-400 mt-1">Minimum $0.01</p>
+            <p className="text-xs text-white/40 mt-1.5">Minimum $0.01</p>
           </Field>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-6">
           <Field label="Investor profit share (%)" required>
             <div className="relative">
               <input
@@ -229,9 +231,9 @@ export default function NewCampaignPage() {
                 onChange={(e) => set('profit_share_pct', e.target.value)}
                 className={`${inputCls} pr-8`}
               />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">%</span>
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">%</span>
             </div>
-            <p className="text-xs text-gray-400 mt-1">Investors receive this % of gross profit</p>
+            <p className="text-xs text-white/40 mt-1.5">Investors receive this % of gross profit</p>
           </Field>
 
           <Field label="Campaign duration (months)" required>
@@ -248,44 +250,48 @@ export default function NewCampaignPage() {
         </div>
 
         {/* Profit interval */}
-        <Field label="Profit reporting interval" required>
-          <select
-            value={form.profit_interval}
-            onChange={(e) => set('profit_interval', e.target.value)}
-            className={inputCls}
-          >
-            <option value="monthly">Monthly</option>
-            <option value="quarterly">Quarterly</option>
-            <option value="yearly">Yearly</option>
-            <option value="milestone">Per Milestone</option>
-          </select>
-        </Field>
+        <div className="pt-4 border-t border-white/10">
+          <Field label="Profit reporting interval" required>
+            <select
+              value={form.profit_interval}
+              onChange={(e) => set('profit_interval', e.target.value)}
+              className={`${inputCls} [&>option]:text-black`}
+            >
+              <option value="monthly">Monthly</option>
+              <option value="quarterly">Quarterly</option>
+              <option value="yearly">Yearly</option>
+              <option value="milestone">Per Milestone</option>
+            </select>
+          </Field>
+        </div>
 
         {/* Business plan URL */}
-        <Field label="Business plan URL (optional)">
-          <input
-            type="url"
-            value={form.business_plan_url}
-            onChange={(e) => set('business_plan_url', e.target.value)}
-            placeholder="https://…"
-            className={inputCls}
-          />
-          <p className="text-xs text-gray-400 mt-1">Link to a PDF in Supabase Storage, Google Drive, or similar</p>
-        </Field>
+        <div className="pt-4 border-t border-white/10">
+          <Field label="Business plan URL (optional)">
+            <input
+              type="url"
+              value={form.business_plan_url}
+              onChange={(e) => set('business_plan_url', e.target.value)}
+              placeholder="https://…"
+              className={inputCls}
+            />
+            <p className="text-xs text-white/40 mt-1.5">Link to a PDF in Supabase Storage, Google Drive, or similar</p>
+          </Field>
+        </div>
 
         {error && (
-          <p className="text-sm text-red-600 bg-red-50 px-4 py-3 rounded-lg">{error}</p>
+          <p className="text-sm text-red-100 bg-red-900/50 border border-red-500/30 px-4 py-3 rounded-lg">{error}</p>
         )}
 
-        <div className="pt-2">
+        <div className="pt-6 mt-6">
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white font-medium py-3 rounded-xl text-sm transition-colors"
+            className="w-full bg-accent hover:bg-accent-hover disabled:opacity-60 text-brand font-bold py-3.5 rounded-xl text-base transition-all shadow-[0_4px_20px_rgba(16,185,129,0.2)] hover:shadow-[0_8px_30px_rgba(16,185,129,0.4)]"
           >
             {loading ? 'Submitting for review…' : 'Submit campaign for review'}
           </button>
-          <p className="text-xs text-center text-gray-400 mt-3">
+          <p className="text-xs text-center text-white/40 mt-4 leading-relaxed max-w-sm mx-auto">
             Your campaign will be reviewed by our team before going live. You&apos;ll be notified once approved.
           </p>
         </div>
@@ -294,13 +300,13 @@ export default function NewCampaignPage() {
   )
 }
 
-const inputCls = 'w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white'
+const inputCls = 'w-full px-4 py-3 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent bg-white/5 text-white placeholder-white/30 transition-all'
 
 function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
   return (
-    <div className="space-y-1">
-      <label className="text-sm font-medium text-gray-700">
-        {label}{required && <span className="text-red-500 ml-0.5">*</span>}
+    <div className="space-y-2">
+      <label className="text-sm font-medium text-white/90">
+        {label}{required && <span className="text-accent ml-1 font-bold">*</span>}
       </label>
       {children}
     </div>
