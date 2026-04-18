@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { summarizePeriod, computeAndDistribute } from '@/lib/services/revenue-oracle.service'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
@@ -13,9 +14,10 @@ export async function POST(
 
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
+  const admin = createAdminClient()
   // Allow admins or the campaign's own founder
-  const { data: profile } = await supabase.from('users').select('role').eq('id', user.id).single()
-  const { data: campaign } = await supabase.from('campaigns').select('founder_id').eq('id', campaignId).single()
+  const { data: profile } = await admin.from('users').select('role').eq('id', user.id).single()
+  const { data: campaign } = await admin.from('campaigns').select('founder_id').eq('id', campaignId).single()
 
   const isAdmin   = profile?.role === 'admin'
   const isFounder = campaign?.founder_id === user.id

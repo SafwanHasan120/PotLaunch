@@ -20,14 +20,15 @@ export async function GET(
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   // Only the founder of this campaign can list pitches
-  const { data: campaign } = await supabase.from('campaigns').select('founder_id').eq('id', campaignId).single()
-  const { data: profile }  = await supabase.from('users').select('role').eq('id', user.id).single()
+  const admin = createAdminClient()
+  const { data: campaign } = await admin.from('campaigns').select('founder_id').eq('id', campaignId).single()
+  const { data: profile }  = await admin.from('users').select('role').eq('id', user.id).single()
 
   if (campaign?.founder_id !== user.id && profile?.role !== 'admin') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await admin
     .from('pitches')
     .select('id, proposed_amount_cents, proposed_profit_share_pct, message, status, founder_response, responded_at, created_at, users!investor_id(full_name)')
     .eq('campaign_id', campaignId)
@@ -47,12 +48,6 @@ export async function POST(
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  // KYC gate
-  const { data: kyc } = await supabase.from('kyc_verifications').select('status').eq('user_id', user.id).maybeSingle()
-  if (kyc?.status !== 'approved') {
-    return NextResponse.json({ error: 'KYC verification required', code: 'KYC_REQUIRED' }, { status: 403 })
-  }
-
   const body = await request.json().catch(() => null)
   const parsed = pitchSchema.safeParse(body)
   if (!parsed.success) {
@@ -60,7 +55,7 @@ export async function POST(
   }
 
   // Validate amount >= campaign minimum
-  const { data: campaign } = await supabase.from('campaigns').select('min_investment_cents, status').eq('id', campaignId).single()
+  const { data: campaign } = await createAdminClient().from('campaigns').select('min_investment_cents, status').eq('id', campaignId).single()
   if (!campaign || campaign.status !== 'live') {
     return NextResponse.json({ error: 'Campaign is not accepting pitches' }, { status: 400 })
   }

@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
 
 export async function GET() {
@@ -9,7 +10,9 @@ export async function GET() {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const { data: wallet } = await supabase
+  const admin = createAdminClient()
+
+  const { data: wallet } = await admin
     .from('wallets')
     .select('id, currency')
     .eq('user_id', user.id)
@@ -19,7 +22,7 @@ export async function GET() {
     return NextResponse.json({ balance_cents: 0, currency: 'USD' })
   }
 
-  const { data: balance } = await supabase
+  const { data: balance } = await admin
     .from('wallet_balances')
     .select('balance_cents, currency')
     .eq('wallet_id', wallet.id)

@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
 
 export async function GET() {
@@ -7,7 +8,7 @@ export async function GET() {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   // Fetch all contracts for campaigns the current user founded
-  const { data, error } = await supabase
+  const { data, error } = await createAdminClient()
     .from('contracts')
     .select(`
       id, capital_cents, profit_share_pct, duration_months,

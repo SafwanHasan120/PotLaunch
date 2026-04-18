@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
@@ -15,7 +16,9 @@ export async function GET(request: NextRequest) {
   const limit = Math.min(50, Math.max(1, Number(searchParams.get('limit') ?? '20')))
   const offset = (page - 1) * limit
 
-  const { data: wallet } = await supabase
+  const admin = createAdminClient()
+
+  const { data: wallet } = await admin
     .from('wallets')
     .select('id')
     .eq('user_id', user.id)
@@ -25,7 +28,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ transactions: [], page, limit, total: 0 })
   }
 
-  const { data: transactions, count } = await supabase
+  const { data: transactions, count } = await admin
     .from('transactions')
     .select('id, direction, tx_type, amount_cents, currency, reference_type, memo, created_at', {
       count: 'exact',

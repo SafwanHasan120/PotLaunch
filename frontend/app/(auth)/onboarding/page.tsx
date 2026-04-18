@@ -51,7 +51,7 @@ export default function OnboardingPage() {
       return
     }
 
-    router.push('/kyc')
+    router.push('/dashboard')
   }
 
   return (

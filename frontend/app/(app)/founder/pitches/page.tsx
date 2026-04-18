@@ -107,10 +107,12 @@ export default function FounderPitchesPage() {
 
   useEffect(() => {
     async function load() {
-      // Fetch founder's campaigns, then pitches for each
-      const campRes = await fetch('/api/campaigns?status=live')
+      // Fetch only the founder's own campaigns
+      const campRes = await fetch('/api/founder/campaigns')
       const campData = await campRes.json()
-      const liveCampaigns: { id: string; title: string }[] = campData.campaigns ?? []
+      const liveCampaigns: { id: string; title: string }[] = (campData.campaigns ?? []).filter(
+        (c: { status: string }) => c.status === 'live'
+      )
 
       const withPitches = await Promise.all(
         liveCampaigns.map(async (c) => {

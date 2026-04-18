@@ -43,10 +43,6 @@ export default function PitchPage({ params }: { params: Promise<{ id: string }> 
       })
       const data = await res.json()
       if (!res.ok) {
-        if (data.code === 'KYC_REQUIRED') {
-          router.push('/kyc?next=' + encodeURIComponent(`/campaigns/${id}/pitch`))
-          return
-        }
         setError(data.error ?? 'Something went wrong')
         return
       }

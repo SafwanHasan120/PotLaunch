@@ -18,7 +18,7 @@ export async function PATCH(
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const { data: profile } = await supabase
+  const { data: profile } = await createAdminClient()
     .from('users').select('role').eq('id', user.id).single()
   if (profile?.role !== 'admin') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
@@ -28,7 +28,7 @@ export async function PATCH(
   const parsed = patchSchema.safeParse(body)
   if (!parsed.success) return NextResponse.json({ error: 'Invalid input' }, { status: 400 })
 
-  const { data: campaign } = await supabase
+  const { data: campaign } = await createAdminClient()
     .from('campaigns').select('status').eq('id', id).single()
   if (!campaign) return NextResponse.json({ error: 'Campaign not found' }, { status: 404 })
   if (campaign.status !== 'pending_review') {
@@ -58,13 +58,13 @@ export async function GET(
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const { data: profile } = await supabase
+  const { data: profile } = await createAdminClient()
     .from('users').select('role').eq('id', user.id).single()
   if (profile?.role !== 'admin') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await createAdminClient()
     .from('campaigns')
     .select(`
       id, title, slug, description, sector, business_type,

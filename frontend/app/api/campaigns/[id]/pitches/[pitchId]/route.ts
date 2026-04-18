@@ -21,7 +21,7 @@ export async function PATCH(
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   // Only the campaign's founder can accept/reject
-  const { data: campaign } = await supabase.from('campaigns').select('founder_id, profit_share_pct, duration_months').eq('id', campaignId).single()
+  const { data: campaign } = await createAdminClient().from('campaigns').select('founder_id, profit_share_pct, duration_months').eq('id', campaignId).single()
   if (!campaign || campaign.founder_id !== user.id) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
@@ -30,7 +30,7 @@ export async function PATCH(
   const parsed = patchSchema.safeParse(body)
   if (!parsed.success) return NextResponse.json({ error: 'Invalid input' }, { status: 400 })
 
-  const { data: pitch } = await supabase.from('pitches').select('id, investor_id, proposed_amount_cents, status').eq('id', pitchId).eq('campaign_id', campaignId).single()
+  const { data: pitch } = await createAdminClient().from('pitches').select('id, investor_id, proposed_amount_cents, status').eq('id', pitchId).eq('campaign_id', campaignId).single()
   if (!pitch) return NextResponse.json({ error: 'Pitch not found' }, { status: 404 })
   if (pitch.status !== 'submitted' && pitch.status !== 'under_review') {
     return NextResponse.json({ error: 'Pitch is no longer pending' }, { status: 409 })
@@ -100,7 +100,7 @@ export async function DELETE(
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const { data: pitch } = await supabase.from('pitches').select('investor_id, status').eq('id', pitchId).eq('campaign_id', campaignId).single()
+  const { data: pitch } = await createAdminClient().from('pitches').select('investor_id, status').eq('id', pitchId).eq('campaign_id', campaignId).single()
   if (!pitch) return NextResponse.json({ error: 'Pitch not found' }, { status: 404 })
   if (pitch.investor_id !== user.id) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   if (pitch.status !== 'submitted') return NextResponse.json({ error: 'Can only withdraw submitted pitches' }, { status: 409 })

@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
@@ -10,7 +11,7 @@ export async function GET(
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const { data: campaign, error } = await supabase
+  const { data: campaign, error } = await createAdminClient()
     .from('campaigns')
     .select(`
       id, title, slug, description, sector,
@@ -36,7 +37,7 @@ export async function GET(
       return NextResponse.json({ error: 'Not found' }, { status: 404 })
     }
     // Check if user is founder or admin
-    const { data: profile } = await supabase
+    const { data: profile } = await createAdminClient()
       .from('users')
       .select('role')
       .eq('id', user.id)
@@ -56,7 +57,7 @@ export async function GET(
     : 0
 
   // Investor count (approximate — count distinct investments)
-  const { count: investorCount } = await supabase
+  const { count: investorCount } = await createAdminClient()
     .from('investments')
     .select('id', { count: 'exact', head: true })
     .eq('campaign_id', id)

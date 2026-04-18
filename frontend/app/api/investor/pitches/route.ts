@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
 
 export async function GET() {
@@ -6,7 +7,7 @@ export async function GET() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const { data, error } = await supabase
+  const { data, error } = await createAdminClient()
     .from('pitches')
     .select('id, proposed_amount_cents, proposed_profit_share_pct, message, status, founder_response, responded_at, created_at, campaign_id, campaigns!campaign_id(title, status)')
     .eq('investor_id', user.id)

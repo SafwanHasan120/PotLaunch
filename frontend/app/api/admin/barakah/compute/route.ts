@@ -12,13 +12,13 @@ export async function POST() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const { data: profile } = await supabase
+  const db = createAdminClient()
+
+  const { data: profile } = await db
     .from('users').select('role').eq('id', user.id).single()
   if (profile?.role !== 'admin') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
-
-  const db = createAdminClient()
 
   // Fetch all founders
   const { data: founders } = await db

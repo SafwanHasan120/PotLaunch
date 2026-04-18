@@ -8,17 +8,17 @@ export async function GET() {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const { data, error } = await createAdminClient()
-    .from('contracts')
+    .from('campaigns')
     .select(`
-      id, capital_cents, profit_share_pct, duration_months,
-      blockchain_address, status, formed_at, completed_at, created_at,
-      campaign_id, investment_id,
-      campaigns!campaign_id ( title, sector )
+      id, title, sector, business_type,
+      target_amount_cents, raised_amount_cents,
+      min_investment_cents, profit_share_pct,
+      duration_months, status, review_notes, created_at
     `)
-    .eq('investor_id', user.id)
+    .eq('founder_id', user.id)
     .order('created_at', { ascending: false })
 
-  if (error) return NextResponse.json({ error: 'Failed to fetch contracts' }, { status: 500 })
+  if (error) return NextResponse.json({ error: 'Failed to fetch campaigns' }, { status: 500 })
 
-  return NextResponse.json({ contracts: data ?? [] })
+  return NextResponse.json({ campaigns: data ?? [] })
 }

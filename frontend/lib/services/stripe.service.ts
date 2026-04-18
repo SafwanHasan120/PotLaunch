@@ -147,7 +147,7 @@ export function createRevenueOAuthUrl(state: string): string {
   const params = new URLSearchParams({
     response_type: 'code',
     client_id: process.env.STRIPE_CLIENT_ID!,
-    scope: 'read_only',
+    scope: 'read_write',
     state,
     redirect_uri: `${APP_URL}/api/stripe/revenue-oauth/callback`,
   })

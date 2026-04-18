@@ -9,8 +9,9 @@ export default function FounderLayout({ children }: { children: React.ReactNode 
         <span className="text-gray-800 font-medium">Founder</span>
       </div>
       <div className="flex gap-6 mb-8">
-        <NavTab href="/founder/revenue" label="Revenue Oracle" />
+        <NavTab href="/founder/campaigns" label="My Campaigns" />
         <NavTab href="/founder/pitches" label="Pitches Received" />
+        <NavTab href="/founder/revenue" label="Revenue Oracle" />
       </div>
       {children}
     </div>

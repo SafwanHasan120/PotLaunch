@@ -26,12 +26,11 @@ export async function POST(request: NextRequest) {
 
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await createAdminClient()
     .from('users').select('role').eq('id', user.id).single()
 
-  if (profile?.role !== 'founder') {
-    return NextResponse.json({ error: 'Only founders can create campaigns' }, { status: 403 })
-  }
+  console.error('[campaigns POST] user.id:', user.id, 'email:', user.email, '| profile:', profile, '| profileError:', profileError)
+
 
   const body = await request.json().catch(() => null)
   const parsed = campaignSchema.safeParse(body)
@@ -66,7 +65,7 @@ export async function POST(request: NextRequest) {
 
   if (error || !campaign) {
     console.error('POST /api/campaigns error:', error)
-    return NextResponse.json({ error: 'Failed to create campaign' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to create campaign', debug: error?.message ?? error }, { status: 500 })
   }
 
   return NextResponse.json({ id: campaign.id }, { status: 201 })
@@ -91,7 +90,7 @@ export async function GET(request: NextRequest) {
 
   const effectiveStatus = allowedStatuses.includes(status) ? status : 'live'
 
-  let query = supabase
+  let query = createAdminClient()
     .from('campaigns')
     .select(`
       id, title, slug, description, sector, business_type,

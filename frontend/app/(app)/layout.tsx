@@ -32,13 +32,13 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <div className="pt-3 pb-1 px-3">
             <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">My Activity</p>
           </div>
+          <NavLink href="/founder/campaigns" label="My Campaigns" />
           <NavLink href="/investor/pitches" label="My Pitches" />
           <NavLink href="/investor/contracts" label="My Contracts" />
           <NavLink href="/founder/revenue" label="Revenue Oracle" />
         </nav>
 
         <div className="px-3 py-4 border-t border-gray-100 space-y-1">
-          <NavLink href="/kyc" label="Identity (KYC)" />
           <LogoutButton />
         </div>
       </aside>

@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
@@ -7,7 +8,9 @@ export async function GET(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const { data: profile } = await supabase
+  const admin = createAdminClient()
+
+  const { data: profile } = await admin
     .from('users').select('role').eq('id', user.id).single()
   if (profile?.role !== 'admin') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
@@ -20,7 +23,7 @@ export async function GET(request: NextRequest) {
   const from  = (page - 1) * limit
   const to    = from + limit - 1
 
-  let query = supabase
+  let query = admin
     .from('revenue_snapshots')
     .select(`
       id, stripe_account_id, period_start, period_end,

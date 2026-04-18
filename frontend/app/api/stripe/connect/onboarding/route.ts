@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { createConnectAccount, createConnectOnboardingLink } from '@/lib/services/stripe.service'
 import { NextResponse } from 'next/server'
 
@@ -10,7 +11,7 @@ export async function POST() {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const { data: profile } = await supabase
+  const { data: profile } = await createAdminClient()
     .from('users')
     .select('stripe_account_id, country_code')
     .eq('id', user.id)

@@ -1,13 +1,11 @@
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
 
 // Public keys readable without authentication
 const PUBLIC_KEYS = ['wakalah_fee_pct']
 
 export async function GET() {
-  const supabase = await createClient()
-
-  const { data, error } = await supabase
+  const { data, error } = await createAdminClient()
     .from('platform_config')
     .select('key, value, description')
     .in('key', PUBLIC_KEYS)
