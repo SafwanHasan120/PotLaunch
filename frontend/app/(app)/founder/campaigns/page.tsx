@@ -23,14 +23,14 @@ function formatUSD(cents: number) {
 }
 
 const STATUS_BADGE: Record<string, string> = {
-  draft:            'bg-gray-100 text-gray-500',
-  pending_review:   'bg-amber-50 text-amber-700',
-  live:             'bg-emerald-100 text-emerald-700',
-  funded:           'bg-blue-100 text-blue-700',
-  in_progress:      'bg-violet-100 text-violet-700',
-  profit_reporting: 'bg-purple-100 text-purple-700',
-  completed:        'bg-gray-100 text-gray-600',
-  failed:           'bg-red-100 text-red-600',
+  draft:            'bg-white/10 text-white/40',
+  pending_review:   'bg-amber-500/20 text-amber-400',
+  live:             'bg-emerald-500/20 text-emerald-400',
+  funded:           'bg-blue-500/20 text-blue-400',
+  in_progress:      'bg-violet-500/20 text-violet-400',
+  profit_reporting: 'bg-purple-500/20 text-purple-400',
+  completed:        'bg-white/10 text-white/40',
+  failed:           'bg-red-500/20 text-red-400',
 }
 
 const STATUS_LABEL: Record<string, string> = {
@@ -66,33 +66,33 @@ export default function FounderCampaignsPage() {
   }, [])
 
   if (loading) return (
-    <div className="space-y-3">
-      {[1,2,3].map(i => <div key={i} className="h-20 bg-gray-100 rounded-xl animate-pulse" />)}
+    <div className="p-8 space-y-3">
+      {[1,2,3].map(i => <div key={i} className="h-20 bg-white/5 rounded-xl animate-pulse" />)}
     </div>
   )
 
-  if (error) return <p className="text-sm text-red-600 bg-red-50 px-4 py-3 rounded-lg">{error}</p>
+  if (error) return <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 px-4 py-3 rounded-lg m-8">{error}</p>
 
   if (campaigns.length === 0) return (
-    <div className="text-center py-16 text-gray-500">
-      <p className="text-lg font-medium">No campaigns yet</p>
+    <div className="text-center py-16 text-white/50 p-8">
+      <p className="text-lg font-medium text-white">No campaigns yet</p>
       <p className="text-sm mt-1">Ready to raise capital?</p>
-      <Link href="/campaigns/new" className="inline-block mt-4 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2 rounded-lg">
+      <Link href="/campaigns/new" className="inline-block mt-4 bg-accent hover:bg-accent-hover text-brand text-sm font-medium px-4 py-2 rounded-lg">
         Launch a campaign
       </Link>
     </div>
   )
 
   return (
-    <div className="space-y-4">
+    <div className="p-8 space-y-4">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-500">{campaigns.length} campaign{campaigns.length !== 1 ? 's' : ''}</p>
-        <Link href="/campaigns/new" className="text-sm bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-3 py-1.5 rounded-lg">
+        <p className="text-sm text-white/50">{campaigns.length} campaign{campaigns.length !== 1 ? 's' : ''}</p>
+        <Link href="/campaigns/new" className="text-sm bg-accent hover:bg-accent-hover text-brand font-medium px-3 py-1.5 rounded-lg">
           + New campaign
         </Link>
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100">
+      <div className="bg-white/5 border border-white/10 rounded-xl divide-y divide-white/10">
         {campaigns.map((c) => {
           const pct = c.target_amount_cents > 0
             ? Math.min(100, Math.round((c.raised_amount_cents / c.target_amount_cents) * 100))
@@ -102,38 +102,35 @@ export default function FounderCampaignsPage() {
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
-                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${STATUS_BADGE[c.status] ?? 'bg-gray-100 text-gray-500'}`}>
+                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${STATUS_BADGE[c.status] ?? 'bg-white/10 text-white/40'}`}>
                       {STATUS_LABEL[c.status] ?? c.status}
                     </span>
-                    <span className="text-xs text-gray-400 capitalize">{c.business_type} · {c.sector}</span>
+                    <span className="text-xs text-white/30 capitalize">{c.business_type} · {c.sector}</span>
                   </div>
-                  <p className="text-sm font-semibold text-gray-900">{c.title}</p>
+                  <p className="text-sm font-semibold text-white">{c.title}</p>
                   {c.review_notes && c.status === 'failed' && (
-                    <p className="text-xs text-red-600 mt-1">Note: {c.review_notes}</p>
+                    <p className="text-xs text-red-400 mt-1">Note: {c.review_notes}</p>
                   )}
                 </div>
-                <Link
-                  href={`/campaigns/${c.id}`}
-                  className="text-xs text-emerald-600 hover:underline shrink-0 font-medium"
-                >
+                <Link href={`/campaigns/${c.id}`} className="text-xs text-accent hover:underline shrink-0 font-medium">
                   View →
                 </Link>
               </div>
 
               <div className="space-y-1">
-                <div className="flex justify-between text-xs text-gray-500">
+                <div className="flex justify-between text-xs text-white/40">
                   <span>{formatUSD(c.raised_amount_cents)} raised</span>
                   <span>{pct}% of {formatUSD(c.target_amount_cents)}</span>
                 </div>
-                <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${pct}%` }} />
+                <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                  <div className="h-full bg-accent rounded-full" style={{ width: `${pct}%` }} />
                 </div>
               </div>
 
-              <div className="flex gap-4 text-xs text-gray-500">
-                <span><strong className="text-gray-800">{c.profit_share_pct}%</strong> investor share</span>
-                <span><strong className="text-gray-800">{c.duration_months}mo</strong> duration</span>
-                <span><strong className="text-gray-800">{formatUSD(c.min_investment_cents)}</strong> min invest</span>
+              <div className="flex gap-4 text-xs text-white/40">
+                <span><strong className="text-white">{c.profit_share_pct}%</strong> investor share</span>
+                <span><strong className="text-white">{c.duration_months}mo</strong> duration</span>
+                <span><strong className="text-white">{formatUSD(c.min_investment_cents)}</strong> min invest</span>
               </div>
             </div>
           )
