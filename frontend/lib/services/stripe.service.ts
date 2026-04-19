@@ -155,8 +155,8 @@ export function createRevenueOAuthUrl(state: string): string {
 }
 
 export async function exchangeRevenueOAuthCode(code: string): Promise<string> {
-  // @ts-expect-error — stripe.oauth exists but types may lag SDK version
-  const response = await stripe.oauth.token({ grant_type: 'authorization_code', code })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const response = await (stripe as any).oauth.token({ grant_type: 'authorization_code', code })
   return response.stripe_user_id as string
 }
 

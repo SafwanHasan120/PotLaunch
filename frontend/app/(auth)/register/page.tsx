@@ -20,7 +20,7 @@ export default function RegisterPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
-    
+
     if (!wantsToInvest && !wantsToRaise) {
       setError('Please select at least one option to continue.')
       return
@@ -52,16 +52,15 @@ export default function RegisterPage() {
     <div className="min-h-screen flex bg-background font-sans">
       {/* Left side - Branding */}
       <div className="hidden lg:flex w-[45%] bg-brand text-background p-12 flex-col justify-between relative overflow-hidden">
-        {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-light/40 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3"></div>
         <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-accent/10 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/4"></div>
-        
+
         <div className="relative z-10">
           <Link href="/" className="text-2xl font-serif font-semibold tracking-tight text-background hover:text-accent transition-colors">
             PotLaunch.
           </Link>
         </div>
-        
+
         <div className="relative z-10 max-w-md">
           <div className="inline-block bg-yellow-500/20 text-yellow-400 text-xs font-semibold px-3 py-1.5 rounded-full mb-6 tracking-wide">
             Ethical Investing
@@ -138,11 +137,11 @@ export default function RegisterPage() {
                   type="checkbox"
                   checked={wantsToInvest}
                   onChange={(e) => setWantsToInvest(e.target.checked)}
-                  className="mt-1 w-4 h-4 text-accent border-brand/20 focus:ring-accent rounded"
+                  className="mt-1 w-4 h-4 accent-accent border-brand/20 focus:ring-accent rounded"
                 />
                 <div>
-                  <p className="text-base font-medium text-brand group-has-checked:text-brand-light">Invest</p>
-                  <p className="text-sm text-brand font-light mt-0.5">Fund campaigns and share in their profits</p>
+                  <p className="text-base font-medium text-brand">Invest</p>
+                  <p className="text-sm text-brand/60 font-light mt-0.5">Fund campaigns and share in their profits</p>
                 </div>
               </label>
               <label className="flex items-start gap-4 p-4 border border-brand/10 rounded-2xl cursor-pointer hover:border-accent/40 bg-white shadow-sm transition-all has-checked:border-accent has-checked:bg-emerald-50 has-checked:shadow-md group">
@@ -150,11 +149,11 @@ export default function RegisterPage() {
                   type="checkbox"
                   checked={wantsToRaise}
                   onChange={(e) => setWantsToRaise(e.target.checked)}
-                  className="mt-1 w-4 h-4 text-accent border-brand/20 focus:ring-accent rounded"
+                  className="mt-1 w-4 h-4 accent-accent border-brand/20 focus:ring-accent rounded"
                 />
                 <div>
-                  <p className="text-base font-medium text-brand group-has-checked:text-brand-light">Raise Funds</p>
-                  <p className="text-sm text-brand font-light mt-0.5">Launch a campaign for my startup or project</p>
+                  <p className="text-base font-medium text-brand">Raise Funds</p>
+                  <p className="text-sm text-brand/60 font-light mt-0.5">Launch a campaign for my startup or project</p>
                 </div>
               </label>
             </fieldset>

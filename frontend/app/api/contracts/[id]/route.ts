@@ -29,7 +29,7 @@ export async function GET(
 
   if (error || !contract) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
-  const campaign = contract.campaigns as { title: string; founder_id: string; sector: string } | null
+  const campaign = (Array.isArray(contract.campaigns) ? contract.campaigns[0] : contract.campaigns) as { title: string; founder_id: string; sector: string } | null
   const isInvestor = contract.investor_id === user.id
   const isFounder = campaign?.founder_id === user.id
 

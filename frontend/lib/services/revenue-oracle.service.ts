@@ -61,7 +61,7 @@ export async function processRevenueEvent(
         net_revenue_cents:   existing.net_revenue_cents + netCents,
         charge_count:        existing.charge_count + 1,
         verified_at:         new Date().toISOString(),
-        raw_stripe_payload:  event.data.object as Record<string, unknown>,
+        raw_stripe_payload:  event.data.object as unknown as Record<string, unknown>,
       })
       .eq('id', existing.id)
   } else {
@@ -82,7 +82,7 @@ export async function processRevenueEvent(
       gross_revenue_cents:  amountCents,
       net_revenue_cents:    netCents,
       charge_count:         1,
-      raw_stripe_payload:   event.data.object as Record<string, unknown>,
+      raw_stripe_payload:   event.data.object as unknown as Record<string, unknown>,
     })
   }
 }
